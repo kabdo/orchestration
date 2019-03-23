@@ -3,6 +3,7 @@
   <descriptionCdata><![CDATA[c5e919fe-2487-48b8-9244-a245a6921c3f.1b2391e0-a48b-47ca-88f9-c5a23466485e.description=<pre>This operation is used to send a smtp email.\n \nInputs\:\n    hostname - The hostname or ip address of the smtp server.\n    port - The port smtp service is listening.\n    from - From email address.\n    to - A delimiter separated list of email address(es) or recipients.\n    cc - A delimiter separated list of email address(es) or recipients, to be placed in the CC.\n    bcc - A delimiter separated list of email address(es) or recipients, to be placed in the BCC.\n    subject - The email subject. If a subject spans on multiple lines, it is formatted to a single one.\n    body - The body of the email.\n    htmlEmail - The value should be true if the email is in rich text/html format. The value should be false if the email is in plain text format.\nValid values\: true, false. \nDefault value\: true. \n    readReceipt - The value should be true if read receipt is required, else false. \nValid values\: true, false. \nDefault value\: false. \n    attachments - A delimiter separated list of files to attach (must be full path).\n    headers - This input contains extra headers you want to be added in the mail. The input has a 'Map' format. Header names are separated from header values through a column delimiter and headers will be separated between them by a row delimiter.\nExample\:\n    Sensitivity\:Company-Confidential\n    message-type\:Multiple Part\n    Sensitivity\:Personal\nIn the above example, the columnDelimiter is "\:" and the rowDelimiter is the new line. You can define multiple values for the same header like in the example above. The delimiters can have multiple characters, but be careful that the rowDelimiter is not a substring of the columnDelimiter.\n    rowDelimiter - The delimiter that separates headers in the 'headers' input.\nDefault value\: "\:"\nExamples\: '|', '\='\n    columnDelimiter - The delimiter that separates the header name from header value on the same row.\nDefault value\: "\\n"\t\nExamples\: ';', '\#'\n    username - If SMTP authentication is needed, the username to send.\n    password - If SMTP authentication is needed, the password to use.\n    characterSet - The character set encoding for the entire email which includes subject, body, attached file name and the attached file. \nValid values\: UTF-8, UTF-16, UTF-32, EUC-JP, ISO-2022-JP, Shift_JIS, Windows-31J.\nDefault value\: UTF-8.\n    contentTransferEncoding - The content transfer encoding scheme (such as 7bit, 8bit, base64, quoted-printable etc) for the entire email which includes subject, body, attached file name and the attached file. \nValid values\: quoted-printable, base64, 7bit, 8bit, binary, x-token.\nDefault value\: quoted-printable (or Q Encoding).\n    delimiter - A delimiter to separate the email recipients and the attachments.\nDefault value\: ','\n    encryptionKeystore - The path to the pks12 formatted keystore used to encrypt the mail.\n    encryptionKeyAlias - The alias of a RSA key pair from the encryptionKeystore. The public key from the pair will be used to encrypt the mail. The key pair must not have password. The recommended key size is 2048 bit or higher.\n    encryptionKeystorePassword - The password for the encryptionKeystore.\n    encryptionAlgorithm - The encryption algorithm applied on the key from the keystore in order to encypt email parts. \nDefault value\: AES256_CBC.\nValid values\: DES_EDE3_CBC, RC2_CBC, IDEA_CBC, CAST5_CBC, AES128_CBC, AES192_CBC, AES256_CBC, CAMELLIA128_CBC, CAMELLIA192_CBC, CAMELLIA256_CBC, SEED_CBC, DES_EDE3_WRAP, AES128_WRAP, AES256_WRAP, CAMELLIA128_WRAP, CAMELLIA192_WRAP, CAMELLIA256_WRAP, SEED_WRAP.\n    enableTLS - Enables starttls. If the server supports TLS or SSL, the communications will be secured by TLS or SSL. If it doesn't support TLS or SSL the communication will be unsecure.\nValid values\: true, false. \nDefault value\: false.\n    timeout - The timeout in seconds for sending the mail message.\n\nResponses\:\n    success - Successfully sent the email.\n    failure - Failed to send the email.\n\nNote\:\n1. For special characters (East Asian, right-to-left languages, etc.) you must install the support files on your local machine.\n2. For doing this on Windows go to Control Panel -> Regional and Language Options -> Language and check the options at Supplemental language support.\n3. You can use KeyStore Explorer to obtain RSA Keystore with keyPairs for encryption/decryption.\n    3.1 If you get "llegal key size exception" you don't have JCE Unlimited Strength installed.\n</pre>
 c5e919fe-2487-48b8-9244-a245a6921c3f.318177be-f3de-4ba4-9238-cc8412b30896.prompt=Character set\:
 c5e919fe-2487-48b8-9244-a245a6921c3f.b199e6b2-b6b7-46bc-b800-e79bd9c12ac6.prompt=Content transfer encoding\:
+c5e919fe-2487-48b8-9244-a245a6921c3f.ca1aef0b-6182-4bdd-ae0d-d3223b4eb399.description=<pre>Copies a file or directory\n\nNote\: If executed on a Windows RAS the timestamp of the source file will not be preserved on the destination file.  This operation will behave like a Unix file system copy.  If you need the timestamp of the file retained during a copy, please use the Windows Only/FS Copy operation.\n\nInput Parameters\:\nsource - source file or directory\ndestination - destination file or directory\noverwrite - if false the operation will fail if a file with the same name already exists in the destination path\n\nResponses\:\nsuccess - copied successfully\nfailure - failed to copy\n</pre>
 c5e919fe-2487-48b8-9244-a245a6921c3f.e0a67699-ff33-4c74-9bcf-b23de8a41ac5.prompt=enable TLS\:
 ]]></descriptionCdata>
   <annotation></annotation>
@@ -46,12 +47,153 @@ c5e919fe-2487-48b8-9244-a245a6921c3f.e0a67699-ff33-4c74-9bcf-b23de8a41ac5.prompt
   <compatibleRuntimeContext>false</compatibleRuntimeContext>
   <historyCheckPointFlow>true</historyCheckPointFlow>
   <steps>
+    <step id="ca1aef0b-6182-4bdd-ae0d-d3223b4eb399">
+      <annotation>c5e919fe-2487-48b8-9244-a245a6921c3f.ca1aef0b-6182-4bdd-ae0d-d3223b4eb399.description</annotation>
+      <name>FS Copy</name>
+      <bounds>
+        <x>0.0</x>
+        <y>180.0</y>
+      </bounds>
+      <layer>-1</layer>
+      <hideInbound>false</hideInbound>
+      <addResultToRunContext>false</addResultToRunContext>
+      <isCriticalStep>false</isCriticalStep>
+      <isNonBlocking>false</isNonBlocking>
+      <isParallelStep>false</isParallelStep>
+      <isSingleResponse>false</isSingleResponse>
+      <recordInHistory>false</recordInHistory>
+      <recordRawOutput>true</recordRawOutput>
+      <recordPrimaryOutput>true</recordPrimaryOutput>
+      <checkPointStep>true</checkPointStep>
+      <historyCheckPointStep>true</historyCheckPointStep>
+      <scriptResultStep>false</scriptResultStep>
+      <userPrompt></userPrompt>
+      <bindings>
+        <staticBinding id="771b2610-1ab5-4e8a-b362-f94af0f1d926">
+          <annotation></annotation>
+          <toContextKey></toContextKey>
+          <fromContextKey></fromContextKey>
+          <assignFromContext>false</assignFromContext>
+          <assignToContext>false</assignToContext>
+          <inputType>STRING</inputType>
+          <isList>false</isList>
+          <required>true</required>
+          <isPersisted>true</isPersisted>
+          <inputSymbol>source</inputSymbol>
+          <listDelimiter>,</listDelimiter>
+          <value>C:\Users\Khali\Downloads\Axigen_x64-10.2.2.msi</value>
+          <record>false</record>
+        </staticBinding>
+        <staticBinding id="f5f44c69-0bb9-426a-a286-b50d812ef523">
+          <annotation></annotation>
+          <toContextKey></toContextKey>
+          <fromContextKey></fromContextKey>
+          <assignFromContext>false</assignFromContext>
+          <assignToContext>false</assignToContext>
+          <inputType>STRING</inputType>
+          <isList>false</isList>
+          <required>true</required>
+          <isPersisted>true</isPersisted>
+          <inputSymbol>destination</inputSymbol>
+          <listDelimiter>,</listDelimiter>
+          <value>d:\</value>
+          <record>false</record>
+        </staticBinding>
+        <userInputBinding id="dbce19d5-4262-409f-9e88-7f17a7d66eea">
+          <annotation></annotation>
+          <toContextKey></toContextKey>
+          <fromContextKey></fromContextKey>
+          <assignFromContext>false</assignFromContext>
+          <assignToContext>false</assignToContext>
+          <inputType>STRING</inputType>
+          <isList>false</isList>
+          <required>false</required>
+          <isPersisted>true</isPersisted>
+          <inputSymbol>overwrite</inputSymbol>
+          <listDelimiter>,</listDelimiter>
+          <record>false</record>
+          <prompt></prompt>
+          <isMultiSelect>false</isMultiSelect>
+          <link>
+            <refId>362bc113-e130-45d5-be90-832d5de87730</refId>
+            <refName>Boolean</refName>
+          </link>
+          <sourceDelimiter>|</sourceDelimiter>
+        </userInputBinding>
+      </bindings>
+      <transitions>
+        <transition id="64616ea3-42be-448d-bed3-15f86bdbac30">
+          <annotation></annotation>
+          <name>success</name>
+          <command>NEXT</command>
+          <linkMode>false</linkMode>
+          <responseSymbol>success</responseSymbol>
+          <shouldHandoff>false</shouldHandoff>
+          <transitionValue>0.0</transitionValue>
+          <destination>
+            <refId>1b2391e0-a48b-47ca-88f9-c5a23466485e</refId>
+          </destination>
+          <source>
+            <refId>ca1aef0b-6182-4bdd-ae0d-d3223b4eb399</refId>
+          </source>
+          <positions>
+            <point>
+              <x>110.0</x>
+              <y>304.0</y>
+            </point>
+            <point>
+              <x>216.0</x>
+              <y>158.0</y>
+            </point>
+          </positions>
+          <labelPosition>
+            <x>333.0</x>
+            <y>0.0</y>
+          </labelPosition>
+        </transition>
+        <transition id="2a669e4f-ef0d-4745-8c82-3cb7e3e791e1">
+          <annotation></annotation>
+          <name>failure</name>
+          <command>NEXT</command>
+          <linkMode>false</linkMode>
+          <responseSymbol>failure</responseSymbol>
+          <shouldHandoff>false</shouldHandoff>
+          <transitionValue>0.0</transitionValue>
+          <destination>
+            <refId>a4f0e1df-6bdc-4beb-9452-d31fe3a0fc98</refId>
+          </destination>
+          <source>
+            <refId>ca1aef0b-6182-4bdd-ae0d-d3223b4eb399</refId>
+          </source>
+          <positions>
+            <point>
+              <x>110.0</x>
+              <y>304.0</y>
+            </point>
+            <point>
+              <x>470.0</x>
+              <y>154.0</y>
+            </point>
+          </positions>
+          <labelPosition>
+            <x>333.0</x>
+            <y>0.0</y>
+          </labelPosition>
+        </transition>
+      </transitions>
+      <properties/>
+      <opRef>
+        <refId>edeb950d-80d1-476f-9e09-d9bb57905f17</refId>
+      </opRef>
+      <assignments/>
+      <throttleSize>0</throttleSize>
+    </step>
     <step id="1b2391e0-a48b-47ca-88f9-c5a23466485e">
       <annotation>c5e919fe-2487-48b8-9244-a245a6921c3f.1b2391e0-a48b-47ca-88f9-c5a23466485e.description</annotation>
       <name>Send Mail</name>
       <bounds>
-        <x>166.0</x>
-        <y>124.0</y>
+        <x>0.0</x>
+        <y>0.0</y>
       </bounds>
       <layer>-1</layer>
       <hideInbound>false</hideInbound>
@@ -405,35 +547,6 @@ c5e919fe-2487-48b8-9244-a245a6921c3f.e0a67699-ff33-4c74-9bcf-b23de8a41ac5.prompt
         </staticBinding>
       </bindings>
       <transitions>
-        <transition id="8f13011d-df9f-4f4b-bcad-c7094a45a09d">
-          <annotation></annotation>
-          <name>failure</name>
-          <command>NEXT</command>
-          <linkMode>false</linkMode>
-          <responseSymbol>failure</responseSymbol>
-          <shouldHandoff>false</shouldHandoff>
-          <transitionValue>0.0</transitionValue>
-          <destination>
-            <refId>a4f0e1df-6bdc-4beb-9452-d31fe3a0fc98</refId>
-          </destination>
-          <source>
-            <refId>1b2391e0-a48b-47ca-88f9-c5a23466485e</refId>
-          </source>
-          <positions>
-            <point>
-              <x>216.0</x>
-              <y>158.0</y>
-            </point>
-            <point>
-              <x>530.0</x>
-              <y>124.0</y>
-            </point>
-          </positions>
-          <labelPosition>
-            <x>333.0</x>
-            <y>0.0</y>
-          </labelPosition>
-        </transition>
         <transition id="16d3c778-5843-47da-8752-3c0b6caaa7b5">
           <annotation></annotation>
           <name>success</name>
@@ -463,6 +576,35 @@ c5e919fe-2487-48b8-9244-a245a6921c3f.e0a67699-ff33-4c74-9bcf-b23de8a41ac5.prompt
             <y>0.0</y>
           </labelPosition>
         </transition>
+        <transition id="c3b6e237-987d-4481-87b2-be754393a517">
+          <annotation></annotation>
+          <name>failure</name>
+          <command>NEXT</command>
+          <linkMode>false</linkMode>
+          <responseSymbol>failure</responseSymbol>
+          <shouldHandoff>false</shouldHandoff>
+          <transitionValue>0.0</transitionValue>
+          <destination>
+            <refId>a4f0e1df-6bdc-4beb-9452-d31fe3a0fc98</refId>
+          </destination>
+          <source>
+            <refId>1b2391e0-a48b-47ca-88f9-c5a23466485e</refId>
+          </source>
+          <positions>
+            <point>
+              <x>110.0</x>
+              <y>34.0</y>
+            </point>
+            <point>
+              <x>470.0</x>
+              <y>154.0</y>
+            </point>
+          </positions>
+          <labelPosition>
+            <x>333.0</x>
+            <y>0.0</y>
+          </labelPosition>
+        </transition>
       </transitions>
       <properties/>
       <opRef>
@@ -475,8 +617,8 @@ c5e919fe-2487-48b8-9244-a245a6921c3f.e0a67699-ff33-4c74-9bcf-b23de8a41ac5.prompt
       <annotation></annotation>
       <name>Error : failure</name>
       <bounds>
-        <x>420.0</x>
-        <y>120.0</y>
+        <x>180.0</x>
+        <y>180.0</y>
       </bounds>
       <layer>-1</layer>
       <hideInbound>false</hideInbound>
@@ -519,7 +661,7 @@ c5e919fe-2487-48b8-9244-a245a6921c3f.e0a67699-ff33-4c74-9bcf-b23de8a41ac5.prompt
       <annotation></annotation>
       <name>Resolved : success</name>
       <bounds>
-        <x>420.0</x>
+        <x>180.0</x>
         <y>0.0</y>
       </bounds>
       <layer>-1</layer>
@@ -560,5 +702,5 @@ c5e919fe-2487-48b8-9244-a245a6921c3f.e0a67699-ff33-4c74-9bcf-b23de8a41ac5.prompt
       <assignments/>
     </returnStep>
   </steps>
-  <startSteps>1b2391e0-a48b-47ca-88f9-c5a23466485e</startSteps>
+  <startSteps>ca1aef0b-6182-4bdd-ae0d-d3223b4eb399</startSteps>
 </flow>
